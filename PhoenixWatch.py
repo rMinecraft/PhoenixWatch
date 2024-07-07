@@ -3,6 +3,7 @@ import time
 
 import asyncpraw
 import discord
+import sqlite3
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -39,8 +40,23 @@ async def connect_reddit():
         password=REDDIT_PASSWORD,
         user_agent="Moderation bot for r/phoenixsc",
     )
+# DB code for qualityvote features
+def create_sqlite_database(filename):
+    """ create a database connection to an SQLite database """
+    conn = None
+    try:
+        conn = sqlite3.connect(filename)
+        print(sqlite3.sqlite_version)
+    except sqlite3.Error as e:
+        print(e)
+    finally:
+        if conn:
+            conn.close()
 
 
+if __name__ == '__main__':
+    create_sqlite_database("bot_v2.db")
+# end of DB code
 @bot.event
 async def on_ready():
     await connect_reddit()
